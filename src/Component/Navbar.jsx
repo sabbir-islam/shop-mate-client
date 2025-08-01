@@ -162,11 +162,6 @@ const Navbar = () => {
           </div>
         </div>
       </aside>
-
-      {/* Main content spacer */}
-      <div className={`${isSidebarOpen ? "lg:ml-64" : "lg:ml-20"} transition-all duration-300`}>
-        {/* Your main content goes here */}
-      </div>
     </>
   );
 };
