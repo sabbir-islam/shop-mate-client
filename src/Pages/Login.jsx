@@ -1,19 +1,32 @@
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
-import React from "react";
+import React, { use } from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { AuthContext } from "../Provider/AuthProvider";
+import { toast } from "react-toastify";
 
 const Login = () => {
+
+    const {login} = use(AuthContext)
+    const navigate = useNavigate()
 
     const handelLogin = (e) =>{
      e.preventDefault()
      const form = e.target
-     const name = form.email.value
+     const email = form.email.value
      const password = form.password.value
+    
 
-     console.log(name,password);
-     
+     login(email,password)
+     .then(result=>{
+        toast.success("Login Successfully");
+        console.log(result);
+        navigate("/")
+     })
+     .catch(err=>{
+        toast.error(err)
+     })
     }
   return (
     <div>

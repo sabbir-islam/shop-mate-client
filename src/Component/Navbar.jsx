@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useLocation } from "react-router";
+import React, { use, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
 import { FiLogOut } from "react-icons/fi";
 
 import {
@@ -18,10 +18,14 @@ import {
   TruckIcon,
   ClipboardDocumentListIcon
 } from "@heroicons/react/24/outline";
+import { AuthContext } from "../Provider/AuthProvider";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const location = useLocation();
+  const {logOut} = use(AuthContext)
+  const navigate = useNavigate()
 
   const menuItems = [
     { name: "Dashboard", href: "/", icon: HomeIcon },
@@ -41,6 +45,17 @@ const Navbar = () => {
   const isActive = (path) => {
     return location.pathname === path;
   };
+
+  const handelLOgOut=()=>{
+    logOut()
+    .then(result=>{
+      toast.success("LogOut Successful")
+      navigate("/login")
+    })
+    .catch(err=>{
+      toast.error(err)
+    })
+  }
 
   return (
     <>
@@ -141,7 +156,7 @@ const Navbar = () => {
           </div>
           {/* log out here  */}
           <div className="p-4 border-t border-slate-700">
-             <button className="btn bg-transparent text-white border-white rounded-xl shadow shadow-0 ml-10">Logout <FiLogOut /></button>
+             <button onClick={handelLOgOut} className="btn bg-transparent text-white border-white rounded-xl shadow shadow-0 ml-10">Logout <FiLogOut /></button>
           </div>
 
           {/* Toggle Button for Desktop */}
