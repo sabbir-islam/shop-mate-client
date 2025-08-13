@@ -30,10 +30,8 @@ const Navbar = () => {
   const menuItems = [
     { name: "Dashboard", href: "/", icon: HomeIcon },
     { name: "Products", href: "/products", icon: ShoppingBagIcon },
-    { name: "Orders", href: "/orders", icon: ClipboardDocumentListIcon },
-    { name: "Customers", href: "/customers", icon: UserGroupIcon },
-    { name: "Inventory", href: "/inventory", icon: TagIcon },
-    { name: "Sales", href: "/sales", icon: CurrencyDollarIcon },
+    { name: "Add Sale", href: "/add-sale", icon: ClipboardDocumentListIcon },
+    { name: "Sales Report", href: "/sales", icon: CurrencyDollarIcon },
     { name: "Suppliers", href: "/suppliers", icon: TruckIcon },
     { name: "Analytics", href: "/analytics", icon: ChartBarIcon },
     { name: "Calendar", href: "/calendar", icon: CalendarIcon },

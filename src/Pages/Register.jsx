@@ -1,30 +1,40 @@
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
-import React, { use } from "react";
+import React, { use, useEffect } from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useLocation } from "react-router";
 import { AuthContext } from "../Provider/AuthProvider";
 import { toast } from "react-toastify";
 import axios from "axios";
 
 const Register = () => {
-
-  const {register} = use(AuthContext)
+  const { register, googleLogin, user } = use(AuthContext);
   const navigate = useNavigate();
-    
+  const location = useLocation();
+
+  // Get the intended destination from state, default to home
+  const from = location.state?.from?.pathname || "/";
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate(from, { replace: true });
+    }
+  }, [user, navigate, from]);
+
   const handelRegister = (e) => {
     e.preventDefault();
     e.preventDefault();
     const form = e.target;
-    const name = form.email.value;
+    const name = form.name.value; // Fixed: was form.email.value
     const photo = form.image.value;
     const email = form.email.value;
     const password = form.password.value;
 
-    console.log({name,password,photo,email});
-    
-    register(email,password)
-    .then((result) => {
+    console.log({ name, password, photo, email });
+
+    register(email, password)
+      .then((result) => {
         toast.success("User Created Successfully");
         console.log(result);
         // const createdUser = result.user;
@@ -42,13 +52,23 @@ const Register = () => {
           .catch((error) => {
             console.error(error);
           });
-        navigate("/");
+        navigate(from, { replace: true });
       })
       .catch((err) => {
-        toast.error(err);
+        toast.error(err.message || "Registration failed");
       });
+  };
 
-
+  const handleGoogleLogin = () => {
+    googleLogin()
+      .then((result) => {
+        toast.success("Registration Successful");
+        console.log(result);
+        navigate(from, { replace: true });
+      })
+      .catch((err) => {
+        toast.error(err.message || "Google registration failed");
+      });
   };
   return (
     <div>
@@ -76,7 +96,7 @@ const Register = () => {
                     className="input"
                     placeholder="Shop Name"
                   />
-                    <label className="label">Shop Image</label>
+                  <label className="label">Shop Image</label>
                   <input
                     name="image"
                     type="text"
@@ -108,8 +128,12 @@ const Register = () => {
               </div>
               <div className="divider">OR</div>
               <div className="mt-4 flex justify-center">
-                <button className="btn bg-transparent w md:w-[332px] rounded-2xl hover:border-[#3B82DE]">
+                <button
+                  onClick={handleGoogleLogin}
+                  className="btn bg-transparent w md:w-[332px] rounded-2xl hover:border-[#3B82DE]"
+                >
                   <FcGoogle size={24} />
+                  Sign up with Google
                 </button>
               </div>
               <div className="flex justify-center mt-4">

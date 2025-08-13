@@ -1,33 +1,54 @@
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
-import React, { use } from "react";
+import React, { use, useEffect } from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useLocation } from "react-router";
 import { AuthContext } from "../Provider/AuthProvider";
 import { toast } from "react-toastify";
 
 const Login = () => {
+  const { login, googleLogin, user } = use(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    const {login} = use(AuthContext)
-    const navigate = useNavigate()
+  // Get the intended destination from state, default to home
+  const from = location.state?.from?.pathname || "/";
 
-    const handelLogin = (e) =>{
-     e.preventDefault()
-     const form = e.target
-     const email = form.email.value
-     const password = form.password.value
-    
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate(from, { replace: true });
+    }
+  }, [user, navigate, from]);
 
-     login(email,password)
-     .then(result=>{
+  const handelLogin = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    login(email, password)
+      .then((result) => {
         toast.success("Login Successfully");
         console.log(result);
-        navigate("/")
-     })
-     .catch(err=>{
-        toast.error(err)
-     })
-    }
+        navigate(from, { replace: true });
+      })
+      .catch((err) => {
+        toast.error(err.message || "Login failed");
+      });
+  };
+
+  const handleGoogleLogin = () => {
+    googleLogin()
+      .then((result) => {
+        toast.success("Login Successfully");
+        console.log(result);
+        navigate(from, { replace: true });
+      })
+      .catch((err) => {
+        toast.error(err.message || "Google login failed");
+      });
+  };
   return (
     <div>
       <div className="min-h-screen bg-slate-600 flex items-center justify-center p-4">
@@ -35,23 +56,27 @@ const Login = () => {
           {/* header  */}
           <div className="text-center mb-6 flex justify-center items-center gap-4">
             <div className="w-10 h-10 bg-[#3B82DE] rounded-lg flex items-center justify-center">
-                <ShoppingBagIcon className="h-6 w-6 text-white" />
-              </div>
+              <ShoppingBagIcon className="h-6 w-6 text-white" />
+            </div>
             <h1 className="text-xl text-gray-700 font-medium">
               Welcome to{" "}
               <span className="font-semibold text-gray-800">ShopMate</span>
             </h1>
-            
           </div>
           {/* form  */}
           <div>
             <div className="card-body">
               <form onSubmit={handelLogin} className="fieldset">
                 <label className="label">Email</label>
-                <input name="email" type="email" className="input" placeholder="Email" />
+                <input
+                  name="email"
+                  type="email"
+                  className="input"
+                  placeholder="Email"
+                />
                 <label className="label">Password</label>
                 <input
-                    name="password"
+                  name="password"
                   type="password"
                   className="input"
                   placeholder="Password"
@@ -59,15 +84,33 @@ const Login = () => {
                 <div>
                   <a className="link link-hover">Forgot password?</a>
                 </div>
-                <button type="submit" className="btn rounded-2xl mt-4 bg-[#3B82DE] text-white">Login<FaArrowRightLong /></button>
+                <button
+                  type="submit"
+                  className="btn rounded-2xl mt-4 bg-[#3B82DE] text-white"
+                >
+                  Login
+                  <FaArrowRightLong />
+                </button>
               </form>
             </div>
             <div className="divider">OR</div>
             <div className="mt-4 flex justify-center">
-                <button className="btn bg-transparent w md:w-[332px] rounded-2xl hover:border-[#3B82DE]"><FcGoogle size={24} /></button>
+              <button
+                onClick={handleGoogleLogin}
+                className="btn bg-transparent w md:w-[332px] rounded-2xl hover:border-[#3B82DE]"
+              >
+                <FcGoogle size={24} />
+                Sign in with Google
+              </button>
             </div>
             <div className="flex justify-center mt-4">
-                <h1 className="text-lg">Don't Have a Account <span className="text-blue-400 font-semibold"> <Link to={'/register'}>Register</Link> </span></h1>
+              <h1 className="text-lg">
+                Don't Have a Account{" "}
+                <span className="text-blue-400 font-semibold">
+                  {" "}
+                  <Link to={"/register"}>Register</Link>{" "}
+                </span>
+              </h1>
             </div>
           </div>
         </div>
