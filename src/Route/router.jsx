@@ -9,6 +9,7 @@ import AddProduct from "../Pages/AddProduct";
 import AddSale from "../Pages/AddSale";
 import ProtectedRoute from "../Component/ProtectedRoute";
 import SalesReport from "../Pages/SalesReport";
+import Employee from "../Pages/Employee";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: "/sales",
         Component: SalesReport
+      },
+      {
+        path: "/employee",
+        Component: Employee
       }
     ],
   },
