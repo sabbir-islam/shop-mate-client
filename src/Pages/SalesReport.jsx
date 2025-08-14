@@ -57,7 +57,185 @@ const SalesReport = () => {
     return '$' + Number(value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
 
-  
+  // Function to fetch sales data for the current user
+  const fetchSalesData = useCallback(async () => {
+    setLoading(true);
+    try {
+      // Get sales only for the current user
+      const response = await fetch(`http://localhost:5000/sales/${user.email}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch sales data');
+      }
+      const data = await response.json();
+      // Ensure all required fields exist
+      const processedData = data.map(sale => ({
+        ...sale,
+        total: sale.total || 0,
+        totalProfit: sale.totalProfit || 0,
+        discount: sale.discount || 0,
+        discountAmount: sale.discountAmount || 0,
+        products: Array.isArray(sale.products) ? sale.products : [],
+      }));
+      setSalesData(processedData);
+    } catch (error) {
+      console.error('Error fetching sales data:', error);
+      toast.error('Failed to load sales data');
+      setSalesData([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [user.email]);
+
+  useEffect(() => {
+    fetchSalesData();
+  }, [fetchSalesData]);
+
+  // Filter data based on the time period
+  const filteredSales = useMemo(() => {
+    if (!salesData.length) return [];
+
+    const now = new Date();
+    let startDate;
+
+    if (timeFilter === 'week') {
+      startDate = startOfWeek(subDays(now, 7));
+    } else if (timeFilter === 'month') {
+      startDate = startOfMonth(subMonths(now, 1));
+    } else if (timeFilter === 'year') {
+      startDate = startOfYear(subYears(now, 1));
+    }
+
+    return salesData.filter(sale => {
+      try {
+        const saleDate = parseISO(sale.saleDate);
+        return isAfter(saleDate, startDate);
+      } catch (e) {
+        // If date parsing fails, exclude this sale
+        return false;
+      }
+    });
+  }, [salesData, timeFilter]);
+
+  // Sort filtered sales
+  const sortedSales = useMemo(() => {
+    return [...filteredSales].sort((a, b) => {
+      if (sortField === 'saleDate') {
+        return sortDirection === 'asc'
+          ? new Date(a.saleDate || 0) - new Date(b.saleDate || 0)
+          : new Date(b.saleDate || 0) - new Date(a.saleDate || 0);
+      } else if (sortField === 'total') {
+        return sortDirection === 'asc'
+          ? (a.total || 0) - (b.total || 0)
+          : (b.total || 0) - (a.total || 0);
+      } else if (sortField === 'totalProfit') {
+        return sortDirection === 'asc'
+          ? (a.totalProfit || 0) - (b.totalProfit || 0)
+          : (b.totalProfit || 0) - (a.totalProfit || 0);
+      }
+      return 0;
+    });
+  }, [filteredSales, sortField, sortDirection]);
+
+  // Calculate summary metrics
+  const summaryMetrics = useMemo(() => {
+    if (!filteredSales.length) {
+      return { totalSales: 0, totalProfit: 0, totalOrders: 0, averageOrderValue: 0 };
+    }
+
+    const totalSales = filteredSales.reduce((sum, sale) => sum + (sale.total || 0), 0);
+    const totalProfit = filteredSales.reduce((sum, sale) => sum + (sale.totalProfit || 0), 0);
+    const totalOrders = filteredSales.length;
+    const averageOrderValue = totalOrders > 0 ? totalSales / totalOrders : 0;
+
+    return { totalSales, totalProfit, totalOrders, averageOrderValue };
+  }, [filteredSales]);
+
+  // Prepare chart data
+  const chartData = useMemo(() => {
+    if (!filteredSales.length) {
+      return {
+        labels: [],
+        datasets: [
+          {
+            label: 'Sales',
+            data: [],
+            borderColor: 'rgb(53, 162, 235)',
+            backgroundColor: 'rgba(53, 162, 235, 0.5)',
+          },
+          {
+            label: 'Profit',
+            data: [],
+            borderColor: 'rgb(75, 192, 192)',
+            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+          }
+        ]
+      };
+    }
+
+    const salesByDate = {};
+    const profitByDate = {};
+
+    filteredSales.forEach(sale => {
+      try {
+        const dateStr = format(new Date(sale.saleDate), 'yyyy-MM-dd');
+        if (!salesByDate[dateStr]) {
+          salesByDate[dateStr] = 0;
+          profitByDate[dateStr] = 0;
+        }
+        salesByDate[dateStr] += (sale.total || 0);
+        profitByDate[dateStr] += (sale.totalProfit || 0);
+      } catch (e) {
+        console.error("Error processing sale date for chart:", e);
+      }
+    });
+
+    const sortedDates = Object.keys(salesByDate).sort();
+
+    return {
+      labels: sortedDates.map(date => {
+        try {
+          return format(new Date(date), 'MMM dd');
+        } catch (e) {
+          return date;
+        }
+      }),
+      datasets: [
+        {
+          label: 'Sales',
+          data: sortedDates.map(date => salesByDate[date]),
+          borderColor: 'rgb(53, 162, 235)',
+          backgroundColor: 'rgba(53, 162, 235, 0.5)',
+        },
+        {
+          label: 'Profit',
+          data: sortedDates.map(date => profitByDate[date]),
+          borderColor: 'rgb(75, 192, 192)',
+          backgroundColor: 'rgba(75, 192, 192, 0.5)',
+        }
+      ]
+    };
+  }, [filteredSales]);
+
+  // Pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = sortedSales.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(sortedSales.length / itemsPerPage);
+
+  // Handle sort toggle
+  const handleSort = (field) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('desc');
+    }
+  };
+
+  // Toggle expanded sale for mobile view
+  const toggleExpandSale = (id) => {
+    setExpandedSale(expandedSale === id ? null : id);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-2 px-2 sm:py-4 sm:px-4 md:py-8">
@@ -493,3 +671,5 @@ const SalesReport = () => {
 };
 
 export default SalesReport;
+
+
