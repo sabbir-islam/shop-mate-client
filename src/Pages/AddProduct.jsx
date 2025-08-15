@@ -274,4 +274,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduc
+export default AddProduct

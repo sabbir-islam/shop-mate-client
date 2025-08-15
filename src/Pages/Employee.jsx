@@ -378,7 +378,7 @@ const Employee = () => {
                                         <td className="py-2 px-3 text-xs md:text-sm hidden md:table-cell">{employee.email}</td>
                                         <td className="py-2 px-3 text-xs md:text-sm hidden sm:table-cell">{employee.phone}</td>
                                         <td className="py-2 px-3 text-xs md:text-sm">{employee.position}</td>
-                                        <td className="py-2 px-3 text-xs md:text-sm">${employee.salary}</td>
+                                        <td className="py-2 px-3 text-xs md:text-sm">৳{employee.salary}</td>
                                         <td className="py-2 px-3 text-xs md:text-sm hidden md:table-cell">
                                             {new Date(employee.joinDate).toLocaleDateString()}
                                         </td>

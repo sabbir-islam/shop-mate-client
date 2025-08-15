@@ -52,9 +52,9 @@ const SalesReport = () => {
   const formatCurrency = (value) => {
     // Check if value is undefined or not a number
     if (value === undefined || value === null || isNaN(Number(value))) {
-      return '$0.00';
+      return '৳0.00';
     }
-    return '$' + Number(value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return '৳' + Number(value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
 
   // Function to fetch sales data for the current user
@@ -313,7 +313,7 @@ const SalesReport = () => {
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-xs md:text-sm text-gray-500">Total Profit</p>
-                <p className={`text-sm sm:text-lg md:text-2xl font-bold mt-1 ${summaryMetrics.totalProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <p className={`text-sm sm:text-lg md:text-2xl font-bold mt-1 ৳{summaryMetrics.totalProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {formatCurrency(summaryMetrics.totalProfit)}
                 </p>
               </div>
@@ -380,9 +380,9 @@ const SalesReport = () => {
                         maxTicksLimit: window.innerWidth < 768 ? 4 : 8,
                         callback: function (value) {
                           if (value >= 1000) {
-                            return '$' + value / 1000 + 'k';
+                            return '৳' + value / 1000 + 'k';
                           }
-                          return '$' + value;
+                          return '৳' + value;
                         },
                         font: {
                           size: window.innerWidth < 768 ? 9 : 12
