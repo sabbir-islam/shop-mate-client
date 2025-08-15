@@ -49,7 +49,7 @@ const EditProduct = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          `http://localhost:5000/products/${user.email}/${productId}`
+          `https://shop-mate-server.vercel.app/products/${user.email}/${productId}`
         );
         
         if (response.ok) {
@@ -132,7 +132,7 @@ const EditProduct = () => {
       };
 
       const response = await fetch(
-        `http://localhost:5000/products/${user.email}/${productId}`,
+        `https://shop-mate-server.vercel.app/products/${user.email}/${productId}`,
         {
           method: 'PUT',
           headers: {

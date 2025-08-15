@@ -61,7 +61,7 @@ const AddProduct = () => {
         createdAt: "2025-08-15 16:40:41",
       };
 
-      const response = await fetch("http://localhost:5000/products", {
+      const response = await fetch("https://shop-mate-server.vercel.app/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

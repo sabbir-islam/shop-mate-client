@@ -32,17 +32,17 @@ const Home = () => {
             setLoading(true);
             try {
                 // Fetch products count
-                const productsResponse = await fetch(`http://localhost:5000/products/${user.email}`);
+                const productsResponse = await fetch(`https://shop-mate-server.vercel.app/products/${user.email}`);
                 const productsData = await productsResponse.json();
                 
                 // Fetch employees count
-                const employeesResponse = await axios.get(`http://localhost:5000/employees/${user.email}`);
+                const employeesResponse = await axios.get(`https://shop-mate-server.vercel.app/employees/${user.email}`);
                 
                 // Fetch suppliers count
-                const suppliersResponse = await axios.get(`http://localhost:5000/suppliers/${user.email}`);
+                const suppliersResponse = await axios.get(`https://shop-mate-server.vercel.app/suppliers/${user.email}`);
                 
                 // Fetch sales data
-                const salesResponse = await fetch(`http://localhost:5000/sales/${user.email}`);
+                const salesResponse = await fetch(`https://shop-mate-server.vercel.app/sales/${user.email}`);
                 const salesData = await salesResponse.json();
                 
                 // Calculate total sales amount

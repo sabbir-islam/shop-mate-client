@@ -40,7 +40,7 @@ const Employee = () => {
     const fetchEmployees = async () => {
         setIsLoading(true);
         try {
-            const { data } = await axios.get(`http://localhost:5000/employees/${userEmail}`);
+            const { data } = await axios.get(`https://shop-mate-server.vercel.app/employees/${userEmail}`);
             setEmployees(data);
         } catch (error) {
             console.error('Error fetching employees:', error);
@@ -73,7 +73,7 @@ const Employee = () => {
                 createdBy: userEmail
             };
             
-            await axios.post(`http://localhost:5000/employees`, newEmployee);
+            await axios.post(`https://shop-mate-server.vercel.app/employees`, newEmployee);
             toast.success('Employee added successfully!');
             setFormData({
                 name: '',
@@ -101,7 +101,7 @@ const Employee = () => {
                 updatedBy: userEmail
             };
             
-            await axios.put(`http://localhost:5000/employees/${editId}`, updatedEmployee);
+            await axios.put(`https://shop-mate-server.vercel.app/employees/${editId}`, updatedEmployee);
             toast.success('Employee updated successfully!');
             setFormData({
                 name: '',
@@ -139,7 +139,7 @@ const Employee = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this employee?')) {
             try {
-                await axios.delete(`http://localhost:5000/employees/${id}`);
+                await axios.delete(`https://shop-mate-server.vercel.app/employees/${id}`);
                 toast.success('Employee deleted successfully!');
                 fetchEmployees();
             } catch (error) {

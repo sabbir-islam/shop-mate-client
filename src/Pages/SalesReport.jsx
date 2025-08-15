@@ -62,7 +62,7 @@ const SalesReport = () => {
     setLoading(true);
     try {
       // Get sales only for the current user
-      const response = await fetch(`http://localhost:5000/sales/${user.email}`);
+      const response = await fetch(`https://shop-mate-server.vercel.app/sales/${user.email}`);
       if (!response.ok) {
         throw new Error('Failed to fetch sales data');
       }

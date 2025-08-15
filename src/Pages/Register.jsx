@@ -41,7 +41,7 @@ const Register = () => {
         // setUser(createdUser);
 
         axios
-          .post("http://localhost:5000/users", {
+          .post("https://shop-mate-server.vercel.app/users", {
             name,
             photo,
             email,

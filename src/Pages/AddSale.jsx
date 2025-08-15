@@ -33,7 +33,7 @@ const AddSale = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:5000/products/${user.email}`
+        `https://shop-mate-server.vercel.app/${user.email}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -194,7 +194,7 @@ const handleSubmitSale = async (e) => {
       soldBy: user.email,
     };
 
-    const response = await fetch("http://localhost:5000/sales", {
+    const response = await fetch("https://shop-mate-server.vercel.app/sales", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

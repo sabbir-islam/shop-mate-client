@@ -25,7 +25,7 @@ const Products = () => {
     setError(null);
     try {
       const response = await fetch(
-        `http://localhost:5000/products/${user.email}`
+        `https://shop-mate-server.vercel.app/products/${user.email}`
       );
       if (response.ok) {
         const data = await response.json();

@@ -32,7 +32,7 @@ const Setting = () => {
 
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:5000/users`);
+        const response = await fetch(`https://shop-mate-server.vercel.app/users`);
         
         if (response.ok) {
           const users = await response.json();
@@ -98,7 +98,7 @@ const Setting = () => {
         email: formData.email
       };
 
-      const response = await fetch(`http://localhost:5000/users/${user.email}`, {
+      const response = await fetch(`https://shop-mate-server.vercel.app/${user.email}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -47,7 +47,7 @@ const Supplier = () => {
     const fetchSuppliers = async () => {
         setIsLoading(true);
         try {
-            const { data } = await axios.get(`http://localhost:5000/suppliers/${user.email}`);
+            const { data } = await axios.get(`https://shop-mate-server.vercel.app/suppliers/${user.email}`);
             setSuppliers(data);
         } catch (error) {
             console.error('Error fetching suppliers:', error);
@@ -79,7 +79,7 @@ const Supplier = () => {
                 createdAt: new Date().toISOString()
             };
             
-            await axios.post(`http://localhost:5000/suppliers`, newSupplier);
+            await axios.post(`https://shop-mate-server.vercel.app/suppliers`, newSupplier);
             toast.success('Supplier added successfully!');
             setFormData({
                 companyName: '',
@@ -109,7 +109,7 @@ const Supplier = () => {
                 updatedAt: new Date().toISOString()
             };
             
-            await axios.put(`http://localhost:5000/suppliers/${editId}`, updatedSupplier);
+            await axios.put(`https://shop-mate-server.vercel.app/${editId}`, updatedSupplier);
             toast.success('Supplier updated successfully!');
             setFormData({
                 companyName: '',
@@ -151,7 +151,7 @@ const Supplier = () => {
     const handleDelete = async (id) => {
         if (window.confirm('Are you sure you want to delete this supplier?')) {
             try {
-                await axios.delete(`http://localhost:5000/suppliers/${id}`);
+                await axios.delete(`https://shop-mate-server.vercel.app/suppliers/${id}`);
                 toast.success('Supplier deleted successfully!');
                 fetchSuppliers();
             } catch (error) {
