@@ -12,6 +12,8 @@ import SalesReport from "../Pages/SalesReport";
 import Employee from "../Pages/Employee";
 import Supplier from "../Pages/Supplier";
 import EditProduct from "../Pages/EditProduct";
+import Setting from "../Pages/Setting";
+import ErorPage from "../Pages/ErorPage";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +59,14 @@ const router = createBrowserRouter([
       {
         path: "/suppliers",
         Component: Supplier
+      },
+      {
+        path: "/settings",
+        Component: Setting
+      },
+      {
+        path: "*",
+        Component: ErorPage
       }
     ],
   },
