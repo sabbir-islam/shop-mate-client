@@ -238,12 +238,11 @@ const Products = () => {
 
                       {/* Action Buttons */}
                       <div className="flex gap-2 pt-2">
-                        <button className="flex-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-colors duration-200">
+                        <Link className="flex-1 text-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-colors duration-200" to={`/edit-product/${product._id}`}>
+                        <button className="">
                           Edit
                         </button>
-                        <button className="flex-1 px-3 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 text-sm rounded-lg transition-colors duration-200">
-                          View
-                        </button>
+                        </Link>
                       </div>
                     </div>
                   </div>

@@ -11,6 +11,7 @@ import ProtectedRoute from "../Component/ProtectedRoute";
 import SalesReport from "../Pages/SalesReport";
 import Employee from "../Pages/Employee";
 import Supplier from "../Pages/Supplier";
+import EditProduct from "../Pages/EditProduct";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
       {
         path: "/products",
         Component: Products
+      },
+      {
+        path: "/edit-product/:productId",
+        Component: EditProduct
       },
       {
         path: "/add-product",
