@@ -11,11 +11,24 @@ const AddProduct = () => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    price: "",
+    buyingPrice: "",
+    sellingPrice: "",
     stock: "",
     category: "",
     image: "",
   });
+
+  const categories = [
+    "SmartPhone",
+    "Laptop",
+    "Tablet",
+    "Headphones",
+    "Camera",
+    "Gaming",
+    "Accessories",
+    "SmartWatch",
+    "Other",
+  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -30,22 +43,22 @@ const AddProduct = () => {
     setLoading(true);
 
     try {
-      // Validate required fields
-      if (!formData.name || !formData.price || !formData.stock) {
+      if (!formData.name || !formData.sellingPrice || !formData.stock) {
         toast.error("Please fill in all required fields");
         setLoading(false);
         return;
       }
 
-      // Prepare data for API
       const productData = {
         name: formData.name.trim(),
         description: formData.description.trim(),
-        price: parseFloat(formData.price),
+        buyingPrice: parseFloat(formData.buyingPrice) || 0,
+        sellingPrice: parseFloat(formData.sellingPrice),
         stock: parseInt(formData.stock),
         category: formData.category.trim(),
         image: formData.image.trim(),
         userEmail: user.email,
+        createdAt: "2025-08-15 16:40:41",
       };
 
       const response = await fetch("http://localhost:5000/products", {
@@ -146,49 +159,6 @@ const AddProduct = () => {
               />
             </div>
 
-            {/* Price and Stock */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label
-                  htmlFor="price"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Price (Taka) *
-                </label>
-                <input
-                  type="number"
-                  id="price"
-                  name="price"
-                  value={formData.price}
-                  onChange={handleChange}
-                  required
-                  min="0"
-                  step="0.01"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                  placeholder="0.00"
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="stock"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Stock Quantity *
-                </label>
-                <input
-                  type="number"
-                  id="stock"
-                  name="stock"
-                  value={formData.stock}
-                  onChange={handleChange}
-                  required
-                  min="0"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                  placeholder="0"
-                />
-              </div>
-            </div>
-
             {/* Category */}
             <div>
               <label
@@ -197,14 +167,85 @@ const AddProduct = () => {
               >
                 Category
               </label>
-              <input
-                type="text"
+              <select
                 id="category"
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+              >
+                <option value="">Select a category</option>
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Price and Stock */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Buying Price */}
+              <div>
+                <label
+                  htmlFor="buyingPrice"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Buying Price (৳)
+                </label>
+                <input
+                  type="number"
+                  id="buyingPrice"
+                  name="buyingPrice"
+                  value={formData.buyingPrice}
+                  onChange={handleChange}
+                  min="0"
+                  step="0.01"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  placeholder="0.00"
+                />
+              </div>
+
+              {/* Selling Price */}
+              <div>
+                <label
+                  htmlFor="sellingPrice"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Selling Price (৳) *
+                </label>
+                <input
+                  type="number"
+                  id="sellingPrice"
+                  name="sellingPrice"
+                  value={formData.sellingPrice}
+                  onChange={handleChange}
+                  required
+                  min="0"
+                  step="0.01"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  placeholder="0.00"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="stock"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Stock Quantity *
+              </label>
+              <input
+                type="number"
+                id="stock"
+                name="stock"
+                value={formData.stock}
+                onChange={handleChange}
+                required
+                min="0"
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                placeholder="Enter product category"
+                placeholder="0"
               />
             </div>
 
@@ -274,4 +315,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct
+export default AddProduct;
