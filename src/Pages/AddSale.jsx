@@ -33,7 +33,7 @@ const AddSale = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        `https://shop-mate-server.vercel.app/${user.email}`
+        `https://shop-mate-server.vercel.app/products/${user.email}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -338,7 +338,7 @@ const handleSubmitSale = async (e) => {
                             {product.name}
                           </h3>
                           <span className="text-lg font-bold text-green-600">
-                            ${product.sellingPrice}
+                            ৳{product.sellingPrice}
                           </span>
                         </div>
                         

@@ -57,7 +57,7 @@ const Navbar = () => {
       if (user && user.email) {
         try {
           setLoading(true);
-          const response = await axios.get('https://shop-mate-server.vercel.app//users');
+          const response = await axios.get('https://shop-mate-server.vercel.app/users');
           const users = response.data;
           
           // Find the current user by email
